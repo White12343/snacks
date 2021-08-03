@@ -1,37 +1,57 @@
 // 每頁數量
 const NUM_PER_PAGE = 10;
-let snacksData = [];
+const isMobile = window.innerWidth <= 414; 
 
+// 原始資料
+let snacksData = [];
+// 篩選後資料
+let filterSnacksData = [];
+// 篩選關鍵字
+const filterKeyword = {
+  city: '',
+  town: '',
+};
+
+// ajax 取得資料
 function getData() {
   // loading
   const elLoading = document.querySelector('.loading');
-  elLoading.classList.add('js-loading-active'); 
+  const body = document.body;
+  elLoading.classList.add('js-loading-active');
+  body.classList.add('js-no-scroll-bar');
 
   const api = '../data/82156b65f0b623b09a59c7418f506965_export.json';
   fetch(api)
     .then(res => res.json())
     .then(data => {
-      console.log(data);
+      // 關閉 loading
       elLoading.classList.remove('js-loading-active'); 
+      body.classList.remove('js-no-scroll-bar');
+      // 暫存資料
       snacksData = data;
+      filterSnacksData = snacksData;
+      // 製作分頁
       setPaginationTemplate(data.length);
+      // 製作內容資料
       setSnacksTemplate(getPageData(1));
+      // 製作縣市篩選選項
+      setCityFilterTemplate(data);
     })
     .catch(err => {
       console.log(err);
     })
 }
 
-// pagination 分頁邏輯
+// 組 pagination 分頁 html
 function setPaginationTemplate(len) {
-  // el
-  const elPaginationList = document.querySelector('.pagination__list');
-  const elTotal = document.querySelector('.pagination__total');
   // 總頁數
-  const totalPage = Math.round(len / NUM_PER_PAGE);
+  const totalPage = Math.ceil(len / NUM_PER_PAGE);
 
-  // 總頁數 tempalte
-  elTotal.textContent = totalPage;
+  if (!isMobile) {
+    // 總頁數 tempalte
+    document.querySelector('.pagination__total').textContent = totalPage;
+    document.querySelector('.pagination__page').textContent = 1;
+  }
 
   let tempalte = '';
 
@@ -47,14 +67,14 @@ function setPaginationTemplate(len) {
       </li>
     `;
   }
-  elPaginationList.innerHTML = tempalte;
+  document.querySelector('.pagination__list').innerHTML = tempalte;
 }
 
 // 小吃內容資料
-function setSnacksTemplate(obj) {
+function setSnacksTemplate(snacksData) {
   let template = '';
   let tableTemplate = '';
-  obj.data.forEach((el, index) => {
+  snacksData.data.forEach((el, index) => {
     let nameTemplate = el.Name;
     if(el.BlogUrl) {
       nameTemplate = `
@@ -65,15 +85,15 @@ function setSnacksTemplate(obj) {
       <li class="snacks__item">
         <div class="card">
           <div class="card__cntr">
-            <h3 class="card__tit">
+            <h3 class="card__tit" title="${el.Name}">
               ${nameTemplate}
             </h3>
             <div class="card__info">
               <p class="card__tag">${el.City}</p>
               <p class="card__area">${el.Town}</p>
             </div>
-            <p class="card__desc">${el.HostWords}</p>
-            <p class="card__address">${el.Address}</p>
+            <p class="card__desc" title="${el.HostWords}">${el.HostWords}</p>
+            <p class="card__address" title="${el.Address}">${el.Address}</p>
           </div>
           <figure class="card__pic">
             <img class="card__img" src="${el.PicURL}" alt="${el.Name}" width="" height="">
@@ -88,11 +108,11 @@ function setSnacksTemplate(obj) {
     
     tableTemplate += `
       <tr class="snacks__tr ${trStyle}">
-        <td class="snacks__td text-right">${obj.min + index + 1}</td>
-        <td class="snacks__td">${el.City}</td>
-        <td class="snacks__td">${el.Town}</td>
-        <td class="snacks__td snacks__name">${el.Name}</td>
-        <td class="snacks__td snacks__address">${el.Address}</td>
+        <td class="snacks__td text-right">${snacksData.min + index + 1}</td>
+        <td class="snacks__td" title="${el.City}">${el.City}</td>
+        <td class="snacks__td" title="${el.Town}">${el.Town}</td>
+        <td class="snacks__td snacks__name" title="${el.Name}">${el.Name}</td>
+        <td class="snacks__td snacks__address" title="${el.Address}">${el.Address}</td>
       </tr>
     `;
   });
@@ -100,29 +120,92 @@ function setSnacksTemplate(obj) {
   document.querySelector('.snacks__tbody').innerHTML = tableTemplate;
 }
 
-// 鄉政區資料
+// 縣市資料
 function getAreaData(data) {
-  let arr = [];
+  const city = [];
+
   data.forEach(item => {
-    arr.push({
-      city: item.City,
-      town: item.Town,
-    })
+    if (!city.includes(item.City)) {
+      city.push(item.City);
+    }
+
   })
-  return arr;
+
+  return city;
 }
 
-function setFilterTemplate(data) {
-  const filterArea = document.querySelector('#FilterArea');
-  const filterTownship = document.querySelector('#FilterTownship');
-  
-  data.forEach(item => {
-    
+// 鄉鎮區資料
+function getTownData(city) {
+  const town = [];
+  snacksData.forEach(item => {
+    if (!town.includes(item.Town) && item.City === city) {
+      town.push(item.Town);
+    }
   })
+  return town;
+}
+
+// 加入縣市資料到畫面
+function setCityFilterTemplate(data) {
+  const filterArea = document.querySelector('#FilterArea');
+  const city = getAreaData(data);
+  filterTemplate(filterArea, city);
+}
+
+// 加入鄉鎮區資料到畫面
+function setTownFilterTemplate(city) {
+  const filterTownship = document.querySelector('#FilterTownship');
+  const town = getTownData(city);
+  filterTemplate(filterTownship, town);
+}
+
+// 組篩選 html
+function filterTemplate(el, data) {
+  let template = '<option class="filter__opt" value="" selected="true" disabled>請選擇行政區域...</option>';
+  data.forEach(item => {
+    template += `
+      <option class="filter__opt" value="${item}">${item}</option>
+    `
+  })
+
+  el.innerHTML = template;
+}
+
+// 篩選功能控制器
+function changeFilterHandler(e) {
+  if (!e.target.classList.contains('filter__select')) {
+    return;
+  }
+  switch (e.target.id) {
+    case 'FilterArea':
+      filterKeyword.city = e.target.value;
+      filterKeyword.town = '';
+      setTownFilterTemplate(filterKeyword.city);
+      break;
+    case 'FilterTownship':
+      filterKeyword.town = e.target.value;
+      break;
+  }
+  filterData();
+}
+
+// 篩選功能
+function filterData() {
+  let arr = [];
+  if (filterKeyword.city) {
+    arr = snacksData.filter(item => item.City === filterKeyword.city)
+  }
+
+  if (filterKeyword.town) {
+    arr = snacksData.filter(item => item.Town === filterKeyword.town)
+  }
+  filterSnacksData = arr;
+  setPaginationTemplate(arr.length);
+  setSnacksTemplate(getPageData(1));
 }
 
 // 換頁
-function changePage(e) {
+function clcikPageHandler(e) {
   const targetClassList = e.target.classList;
   if (!targetClassList.contains('pagination__link') || targetClassList.contains('js-pagination__link--active')) {
     return;
@@ -140,7 +223,7 @@ function changePage(e) {
 
 // 換頁取資料
 function getPageData(page) {
-  if(!snacksData.length) {
+  if(!filterSnacksData.length) {
     return;
   }
 
@@ -151,18 +234,18 @@ function getPageData(page) {
   obj.max = obj.min + NUM_PER_PAGE - 1;
 
   for (let i = obj.min; i <= obj.max; i++) {
-    if (!snacksData[i]) {
+    if (!filterSnacksData[i]) {
       obj.max = i;
       break;
     }
-    obj.data.push(snacksData[i]);
+    obj.data.push(filterSnacksData[i]);
   }
 
   return obj;
 }
 
 // mode 改變檢視模式
-function changeMode(e) {
+function clickModeHandler(e) {
   const target = e.target.parentElement;
   if (!target.classList.contains('mode__btn') || target.classList.contains('js-mode__btn--active')) {
     return;
@@ -176,6 +259,7 @@ function changeMode(e) {
   actionMode(target.id, addMode)
 }
 
+// 檢視模式動作執行
 function actionMode(id, action) {
   const snacks = document.querySelector('.snacks');
   action(snacks, id);
@@ -214,9 +298,13 @@ function init() {
 
   // click
   // 檢視模式
-  document.querySelector('.mode__list').addEventListener('click', changeMode);
+  document.querySelector('.mode__list').addEventListener('click', clickModeHandler);
   // 分頁
-  document.querySelector('.pagination__list').addEventListener('click', changePage);
+  document.querySelector('.pagination__list').addEventListener('click', clcikPageHandler);
+
+  // change 
+  // 篩選
+  document.querySelector('.filter').addEventListener('change', changeFilterHandler)
 
 }
 
