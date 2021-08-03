@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="desc">
+  <script src="https://kit.fontawesome.com/892efcd286.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="./style/all.css">
   <title>農村美食小吃</title>
 </head>
@@ -42,7 +43,7 @@
                 </p>
               </div>
               <figure class="card__pic">
-                <img class="card__img" src="https://ezgo.coa.gov.tw/Uploads/opendata/TainmaMain01/APPLY_D/20151007173924.jpg" alt="湖莓宴餐坊" width="" height="">
+                <img class="card__img" src="https://media.istockphoto.com/photos/food-backgrounds-table-filled-with-large-variety-of-food-picture-id1155240408?s=612x612" alt="湖莓宴餐坊" width="" height="">
               </figure>
             </div>
           </li>
@@ -50,11 +51,11 @@
         <table class="snacks__table">
           <thead class="snacks__thead">
             <tr>
-              <th class="snacks__th">編號</th>
+              <th class="snacks__th" width="65">編號</th>
               <th class="snacks__th">行政區域</th>
               <th class="snacks__th">鄉鎮區</th>
-              <th class="snacks__th">商家</th>
-              <th class="snacks__th">地址</th>
+              <th class="snacks__th" width="270">商家</th>
+              <th class="snacks__th" width="370">地址</th>
             </tr>
           </thead>
           <tbody class="snacks__tbody">
@@ -62,29 +63,15 @@
               <td class="snacks__td text-right">1</td>
               <td class="snacks__td">苗栗縣</td>
               <td class="snacks__td">大湖鄉</td>
-              <td class="snacks__td">湖莓宴餐坊</td>
-              <td class="snacks__td">苗栗縣大湖鄉富興村八寮彎2-7號4樓</td>
+              <td class="snacks__td snacks__name">湖莓宴餐坊</td>
+              <td class="snacks__td snacks__address">苗栗縣大湖鄉富興村八寮彎2-7號4樓</td>
             </tr>
-            <tr class="snacks__tr snacks__tr--even">
+            <tr class="snacks__tr js-snacks__tr--even">
               <td class="snacks__td text-right">2</td>
               <td class="snacks__td">苗栗縣</td>
               <td class="snacks__td">大湖鄉</td>
-              <td class="snacks__td">湖莓宴餐坊</td>
-              <td class="snacks__td">苗栗縣大湖鄉富興村八寮彎2-7號4樓</td>
-            </tr>
-            <tr class="snacks__tr">
-              <td class="snacks__td text-right">3</td>
-              <td class="snacks__td">苗栗縣</td>
-              <td class="snacks__td">大湖鄉</td>
-              <td class="snacks__td">湖莓宴餐坊</td>
-              <td class="snacks__td">苗栗縣大湖鄉富興村八寮彎2-7號4樓</td>
-            </tr>
-            <tr class="snacks__tr snacks__tr--even">
-              <td class="snacks__td text-right">4</td>
-              <td class="snacks__td">苗栗縣</td>
-              <td class="snacks__td">大湖鄉</td>
-              <td class="snacks__td">湖莓宴餐坊</td>
-              <td class="snacks__td">苗栗縣大湖鄉富興村八寮彎2-7號4樓</td>
+              <td class="snacks__td snacks__name">湖莓宴餐坊</td>
+              <td class="snacks__td snacks__address">苗栗縣大湖鄉富興村八寮彎2-7號4樓</td>
             </tr>
           </tbody>
         </table>
@@ -95,12 +82,36 @@
         -->
         <aside class="snacks__console">
           <!-- 篩選 -->
-          <div class="snacks__filter">
-
+          <div class="snacks__filter filter">
+            <select class="filter__select" name="FilterArea" id="FilterArea">
+              <option value="" selected="true" disabled>請選擇行政區域...</option>
+            </select>
+            <select class="filter__select" name="FilterTownship" id="FilterTownship">
+              <option value="" selected="true" disabled>請選擇鄉鎮區...</option>
+            </select>
           </div>
           <!-- 檢視模式 -->
-          <div class="snacks__mode">
-
+          <div class="snacks__mode mode">
+            <p class="mode__tit">檢視模式：</p>
+            <div class="mode__cntr">
+              <ul class="mode__list">
+                <li class="mode__item">
+                  <button class="mode__btn js-mode__btn--active" id="List">
+                    <i class="fas fa-th-list"></i>
+                  </button>
+                </li>
+                <li class="mode__item">
+                  <button class="mode__btn" id="Table">
+                    <i class="fas fa-align-justify"></i>
+                  </button>
+                </li>
+                <li class="mode__item">
+                  <button class="mode__btn" id="Card">
+                    <i class="fas fa-th-large"></i>
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         </aside>
       </div>
@@ -108,14 +119,11 @@
         <div class="pagination__tit">
           美食頁次 
           <span class="pagination__page">1</span>/
-          <span class="pagination__total">14</span>
+          <span class="pagination__total">1</span>
         </div>
         <ol class="pagination__list">
           <li class="pagination__item">
-            <a class="pagination__link" href="javascript:;">1</a>
-          </li>
-          <li class="pagination__item">
-            <a class="pagination__link" href="javascript:;">2</a>
+            <a class="pagination__link js-pagination__link--active" href="javascript:;" data-page="1">1</a>
           </li>
         </ol>
       </div>
@@ -138,7 +146,7 @@
               </figure>
             </a>
           </li>
-          <li class="ad__item">
+          <li class="ad__item ad__item--sticky">
             <a class="ad__link" href="javascript:;">
               <figure class="ad__inner">
                 <img class="ad__img img-resp" src="./images/adv3.png" alt="adv3" width="300" height="600">
@@ -162,5 +170,6 @@
       </p>
     </div>
   </footer>
+  <script src="./js/index.js"></script>
 </body>
 </html>
