@@ -62,7 +62,7 @@ function setPaginationTemplate(len) {
     }
 
     tempalte += `
-      <button class="pagination__btn ${active}" type="button" data-page="${i + 1}">${i + 1}</button>
+      <button class="pagination__btn ${active}" type="button" value="${i + 1}">${i + 1}</button>
     `;
   }
   document.querySelector('#Pagination .pagination__cntr').innerHTML = tempalte;
@@ -166,7 +166,7 @@ function setTownFilterTemplate(city) {
 
 // 組篩選 html
 function filterTemplate(el, data) {
-  let template = '<option class="filter__opt" value="" selected="true" disabled>請選擇行政區域...</option>';
+  let template = '<option class="filter__opt" value="" selected disabled>請選擇行政區域...</option>';
   data.forEach(item => {
     template += `
       <option class="filter__opt" value="${item}">${item}</option>
@@ -217,7 +217,7 @@ function clcikPageHandler(e) {
   }
   const target = e.target;
   const elPage = document.querySelector('#Pagination .pagination__page');
-  const page = parseInt(target.dataset.page);
+  const page = parseInt(target.value);
 
   document.querySelector('.js-pagination__btn--active').classList.remove('js-pagination__btn--active');
   target.classList.add('js-pagination__btn--active');
