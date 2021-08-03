@@ -15,7 +15,7 @@ const filterKeyword = {
 // ajax 取得資料
 function getData() {
   // loading
-  const elLoading = document.querySelector('.loading');
+  const elLoading = document.querySelector('#Loading');
   const body = document.body;
   elLoading.classList.add('js-loading-active');
   body.classList.add('js-no-scroll-bar');
@@ -49,8 +49,8 @@ function setPaginationTemplate(len) {
 
   if (!isMobile) {
     // 總頁數 tempalte
-    document.querySelector('.pagination__total').textContent = totalPage;
-    document.querySelector('.pagination__page').textContent = 1;
+    document.querySelector('#Pagination .pagination__total').textContent = totalPage;
+    document.querySelector('#Pagination .pagination__page').textContent = 1;
   }
 
   let tempalte = '';
@@ -58,23 +58,43 @@ function setPaginationTemplate(len) {
   for (let i = 0; i < totalPage; i++) {
     let active = '';
     if(i === 0) {
-      active = 'js-pagination__link--active';
+      active = 'js-pagination__btn--active';
     }
 
     tempalte += `
-      <li class="pagination__item">
-        <a class="pagination__link ${active}" href="javascript:;" data-page="${i + 1}">${i + 1}</a>
-      </li>
+      <button class="pagination__btn ${active}" type="button" data-page="${i + 1}">${i + 1}</button>
     `;
   }
-  document.querySelector('.pagination__list').innerHTML = tempalte;
+  document.querySelector('#Pagination .pagination__cntr').innerHTML = tempalte;
 }
 
 // 小吃內容資料
-function setSnacksTemplate(snacksData) {
-  let template = '';
+function setSnacksTemplate(data) {
+  setCardTemplate(data);
+  setTableTemplate(data);
+}
+
+// 組表格 html
+function setTableTemplate(data) {
   let tableTemplate = '';
-  snacksData.data.forEach((el, index) => {
+  data.data.forEach((el, index) => {
+    tableTemplate += `
+      <tr class="snacks__tr">
+        <td class="snacks__td text-right">${data.min + index + 1}</td>
+        <td class="snacks__td" title="${el.City}">${el.City}</td>
+        <td class="snacks__td" title="${el.Town}">${el.Town}</td>
+        <td class="snacks__td snacks__name" title="${el.Name}">${el.Name}</td>
+        <td class="snacks__td snacks__address" title="${el.Address}">${el.Address}</td>
+      </tr>
+    `;
+  });
+  document.querySelector('#SnacksTable .snacks__tbody').innerHTML = tableTemplate;
+}
+
+// 組清單、卡片 html
+function setCardTemplate(data) {
+  let template = '';
+  data.data.forEach((el) => {
     let nameTemplate = el.Name;
     if(el.BlogUrl) {
       nameTemplate = `
@@ -95,29 +115,14 @@ function setSnacksTemplate(snacksData) {
             <p class="card__desc" title="${el.HostWords}">${el.HostWords}</p>
             <p class="card__address" title="${el.Address}">${el.Address}</p>
           </div>
-          <figure class="card__pic">
+          <figure class="card__inner">
             <img class="card__img" src="${el.PicURL}" alt="${el.Name}" width="" height="">
           </figure>
         </div>
       </li>
     `;
-    let trStyle = '';
-    if (index % 2) {
-      trStyle = 'js-snacks__tr--even';
-    }
-    
-    tableTemplate += `
-      <tr class="snacks__tr ${trStyle}">
-        <td class="snacks__td text-right">${snacksData.min + index + 1}</td>
-        <td class="snacks__td" title="${el.City}">${el.City}</td>
-        <td class="snacks__td" title="${el.Town}">${el.Town}</td>
-        <td class="snacks__td snacks__name" title="${el.Name}">${el.Name}</td>
-        <td class="snacks__td snacks__address" title="${el.Address}">${el.Address}</td>
-      </tr>
-    `;
   });
-  document.querySelector('.snacks__list').innerHTML = template;
-  document.querySelector('.snacks__tbody').innerHTML = tableTemplate;
+  document.querySelector('#SnacksList').innerHTML = template;
 }
 
 // 縣市資料
@@ -207,15 +212,15 @@ function filterData() {
 // 換頁
 function clcikPageHandler(e) {
   const targetClassList = e.target.classList;
-  if (!targetClassList.contains('pagination__link') || targetClassList.contains('js-pagination__link--active')) {
+  if (!targetClassList.contains('pagination__btn') || targetClassList.contains('js-pagination__btn--active')) {
     return;
   }
   const target = e.target;
-  const elPage = document.querySelector('.pagination__page');
+  const elPage = document.querySelector('#Pagination .pagination__page');
   const page = parseInt(target.dataset.page);
 
-  document.querySelector('.js-pagination__link--active').classList.remove('js-pagination__link--active');
-  target.classList.add('js-pagination__link--active');
+  document.querySelector('.js-pagination__btn--active').classList.remove('js-pagination__btn--active');
+  target.classList.add('js-pagination__btn--active');
   elPage.textContent = page;
 
   setSnacksTemplate(getPageData(page));
@@ -261,7 +266,7 @@ function clickModeHandler(e) {
 
 // 檢視模式動作執行
 function actionMode(id, action) {
-  const snacks = document.querySelector('.snacks');
+  const snacks = document.querySelector('#Snacks');
   action(snacks, id);
 }
 
@@ -298,13 +303,13 @@ function init() {
 
   // click
   // 檢視模式
-  document.querySelector('.mode__list').addEventListener('click', clickModeHandler);
+  document.querySelector('#Mode .mode__list').addEventListener('click', clickModeHandler);
   // 分頁
-  document.querySelector('.pagination__list').addEventListener('click', clcikPageHandler);
+  document.querySelector('#Pagination .pagination__cntr').addEventListener('click', clcikPageHandler);
 
   // change 
   // 篩選
-  document.querySelector('.filter').addEventListener('change', changeFilterHandler)
+  document.querySelector('#Filter').addEventListener('change', changeFilterHandler)
 
 }
 

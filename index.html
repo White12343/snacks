@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="desc">
+  <link rel="icon" href="./images/favicon.ico">
   <script src="https://kit.fontawesome.com/892efcd286.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="./style/all.css">
   <title>農村美食小吃</title>
@@ -22,57 +23,21 @@
         2. 表格 snack-table
         3. 卡片 snack-card
       -->
-      <div class="snacks snacks-list">
+      <div class="snacks snacks-list" id="Snacks">
         <!-- 列表 -->
-        <ol class="snacks__list">
-          <!-- <li class="snacks__item">
-            <div class="card">
-              <div class="card__cntr">
-                <h3 class="card__tit">
-                  <a class="card__link" href="javascript:;" target="_blank">湖莓宴餐坊</a>
-                </h3>
-                <div class="card__info">
-                  <p class="card__tag">苗栗縣</p>
-                  <p class="card__area">大湖鄉</p>
-                </div>
-                <p class="card__desc">
-                  湖苺宴開在大湖酒莊的4樓，是大湖地區農會經營的田媽媽餐坊，但是不同於一般田園風格的田媽媽主題餐廳，主打草莓創意料理的湖苺宴，裝潢、菜色都充滿年輕想法，一群六年級中段班的田媽媽，把她們對草莓的奇思異想，充份發揮在料理上。 餐廳所供的菜色會依季節不同做更換，皆以套餐為主，在草莓產季菜單有德國烤豬腳酌草莓醋酸菜、草莓魚排酌草莓酸辣醬等，另外，這裡的意大利麵可是別處吃不到的哦！因為田媽媽們在麵條中加入了草莓，遊客吃了會有驚豔之感哦！ 若是水梨產季，則推出水梨風味套餐，其中「水梨磨菇里肌肉餐」餐點以新鮮的水梨加上鮮嫩多汁的里肌肉以燴飯的方式呈現，讓您吃到水果的鮮甜及富有彈性的里肌肉，多層次的口感保證讓您回味無窮。
-                </p>
-                <p class="card__address">
-                  苗栗縣大湖鄉富興村八寮彎2-7號4樓
-                </p>
-              </div>
-              <figure class="card__pic">
-                <img class="card__img" src="https://media.istockphoto.com/photos/food-backgrounds-table-filled-with-large-variety-of-food-picture-id1155240408?s=612x612" alt="湖莓宴餐坊" width="" height="">
-              </figure>
-            </div>
-          </li> -->
+        <ol class="snacks__list" id="SnacksList">
         </ol>
-        <table class="snacks__table">
+        <table class="snacks__table" id="SnacksTable">
           <thead class="snacks__thead">
             <tr>
               <th class="snacks__th" width="65">編號</th>
-              <th class="snacks__th">行政區域</th>
+              <th class="snacks__th" width="100">行政區域</th>
               <th class="snacks__th">鄉鎮區</th>
               <th class="snacks__th" width="270">商家</th>
               <th class="snacks__th" width="370">地址</th>
             </tr>
           </thead>
           <tbody class="snacks__tbody">
-            <!-- <tr class="snacks__tr">
-              <td class="snacks__td text-right">1</td>
-              <td class="snacks__td">苗栗縣</td>
-              <td class="snacks__td">大湖鄉</td>
-              <td class="snacks__td snacks__name">湖莓宴餐坊</td>
-              <td class="snacks__td snacks__address">苗栗縣大湖鄉富興村八寮彎2-7號4樓</td>
-            </tr>
-            <tr class="snacks__tr js-snacks__tr--even">
-              <td class="snacks__td text-right">2</td>
-              <td class="snacks__td">苗栗縣</td>
-              <td class="snacks__td">大湖鄉</td>
-              <td class="snacks__td snacks__name">湖莓宴餐坊</td>
-              <td class="snacks__td snacks__address">苗栗縣大湖鄉富興村八寮彎2-7號4樓</td>
-            </tr> -->
           </tbody>
         </table>
         <!-- 
@@ -82,7 +47,7 @@
         -->
         <aside class="snacks__console">
           <!-- 篩選 -->
-          <div class="snacks__filter filter">
+          <div class="snacks__filter filter" id="Filter">
             <select class="filter__select" name="FilterArea" id="FilterArea">
               <option value="" selected="true" disabled>請選擇行政區域...</option>
             </select>
@@ -91,7 +56,7 @@
             </select>
           </div>
           <!-- 檢視模式 -->
-          <div class="snacks__mode mode">
+          <div class="snacks__mode mode" id="Mode">
             <p class="mode__tit">檢視模式：</p>
             <div class="mode__cntr">
               <ul class="mode__list">
@@ -115,17 +80,14 @@
           </div>
         </aside>
       </div>
-      <div class="pagination">
+      <div class="pagination" id="Pagination">
         <div class="pagination__tit">
           美食頁次 
           <span class="pagination__page">1</span>/
           <span class="pagination__total">1</span>
         </div>
-        <ol class="pagination__list">
-          <li class="pagination__item">
-            <a class="pagination__link js-pagination__link--active" href="javascript:;" data-page="1">1</a>
-          </li>
-        </ol>
+        <div class="pagination__cntr">
+        </div>
       </div>
     </div>
     <!-- ad -->
@@ -157,7 +119,7 @@
       </div>
     </aside>
   </main>
-  <div class="loading">
+  <div class="loading" id="Loading">
     <div class="loading__cntr">
       <p class="loading__desc">資料下載中..請稍後!</p>
     </div>

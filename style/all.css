@@ -260,7 +260,7 @@ a {
   line-height: 1.7;
 }
 
-.card__pic::after {
+.card__inner::after {
   content: "";
   position: absolute;
   top: 0;
@@ -317,7 +317,7 @@ a {
   font-size: 2rem;
 }
 
-.snacks-list .card__pic{
+.snacks-list .card__inner{
   position: relative;
   width: 250px;
   min-width: 250px;
@@ -332,7 +332,7 @@ a {
 
 
 @media screen and (max-width: 414px) {
-  .snacks-list .card__pic{
+  .snacks-list .card__inner{
     width: 100%;
   }
 
@@ -356,7 +356,7 @@ a {
   }
 }
 
-.snacks-list .card:hover .card__pic::after{
+.snacks-list .card:hover .card__inner::after{
   background-color: rgba(0, 0, 0, 0);
 }
 
@@ -466,7 +466,7 @@ a {
   display: none;
 }
 
-.snacks-card .card__pic {
+.snacks-card .card__inner {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -517,9 +517,13 @@ a {
 .snacks__td {
   padding: 1rem;
   border: 1px solid #e1e1e1;
+}
+
+.snacks__td {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+
 }
 
 .snacks__name,
@@ -531,12 +535,11 @@ a {
   background-color: #EFF4F7;
 }
 
-.js-snacks__tr--even {
+.snacks__tr:nth-child(even) {
   background-color: #F9F9F9;
 }
 
 /* ad */
-
 .ad,
 .ad__list {
   height: 100%;
@@ -558,7 +561,6 @@ a {
 }
 
 /* pagination */
-
 .pagination {
   display: flex;
   justify-content: space-between;
@@ -567,24 +569,27 @@ a {
   margin-bottom: 1em;
 }
 
-.pagination__list {
+.pagination__cntr {
   display: flex;
   flex-wrap: wrap;
 }
 
-.pagination__item {
-  margin-bottom: 6px;
-}
-
-.pagination__item + .pagination__item {
-  margin-left: 6px;
-}
-
-.pagination__link {
-  display: inline-block;
+.pagination__btn {
   padding: 6px 12px;
+  margin-bottom: 6px;
   color: #B0ABA8;
   background-color: #DCDCDC;
+  border: 0;
+  cursor: pointer;
+}
+
+.js-pagination__btn--active {
+  color: #fff;
+  background-color: #0CA4D3;
+}
+
+.pagination__btn + .pagination__btn {
+  margin-left: 6px;
 }
 
 .js-pagination__link--active {
@@ -597,12 +602,12 @@ a {
     display: none;
   }
 
-  .pagination__item + .pagination__item {
-    margin-left: 0;
+  .pagination__btn {
+    margin-right: 6px;
   }
 
-  .pagination__item {
-    margin-right: 6px;
+  .pagination__btn + .pagination__btn {
+    margin-left: 0;
   }
 }
 
