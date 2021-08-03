@@ -20,7 +20,7 @@ function getData() {
   elLoading.classList.add('js-loading-active');
   body.classList.add('js-no-scroll-bar');
 
-  const api = '../data/82156b65f0b623b09a59c7418f506965_export.json';
+  const api = './82156b65f0b623b09a59c7418f506965_export.json';
   fetch(api)
     .then(res => res.json())
     .then(data => {
